@@ -4,7 +4,7 @@ module API
 
       def index
         CurrentMonth.first
-        render json: 'Site is up! GIT TEST', status: 200
+        render json: 'Site is up! GIT TEST11', status: 200
       end
 
     end
