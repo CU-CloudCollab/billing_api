@@ -5,20 +5,23 @@ module API
 
       def index
         if @current_user.admin?
-          @details = []
-          @details_array = ActiveRecord::Base.connection.execute("select linked_account_id, kfs_account, cost_center, business_purpose, sum(blended_cost) from billing_detail a, aws_accounts b where month(a.usage_start_date) = '#{params[:month]}' and year(a.usage_start_date) = '#{params[:year]}' and a.linked_account_id = b.account_number group by linked_account_id, cost_center, business_purpose, kfs_account")
+          if params[:month] && params[:year]
+            @details = []
+            @details_array = ActiveRecord::Base.connection.execute("select linked_account_id, kfs_account, cost_center, business_purpose, sum(blended_cost) from billing_detail a, aws_accounts b where a.month = '#{params[:month]}' and a.year = '#{params[:year]}' and a.linked_account_id = b.account_number group by linked_account_id, cost_center, business_purpose, kfs_account")
 
-          @details_array.each do |detail|
-            @details.push({
-              aws_account: detail[0],
-              kfs_account: detail[1],
-              cost_center: detail[2],
-              business_purpose: detail[3],
-              cost: detail[4],
-              })
+            @details_array.each do |detail|
+              @details.push({
+                aws_account: detail[0],
+                kfs_account: detail[1],
+                cost_center: detail[2],
+                business_purpose: detail[3],
+                cost: detail[4],
+                })
+            end
+            render json: { account_detail: @details}
+          else
+            render json: 'Must supply year and month', status: 501
           end
-
-          render json: { account_detail: @details}
         else
           render json: 'Bad credentials', status: 401
         end
