@@ -7,6 +7,5 @@ gem 'puma'
 
 gem 'spring', :group => :development
 
-gem 'mysql', platform: :ruby
-gem 'jdbc-mysql', platform: :jruby
-gem 'activerecord-jdbc-adapter', platform: :jruby
+gem 'sqlite3'
+gem 'mysql'
