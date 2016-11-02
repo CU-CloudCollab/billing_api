@@ -29,3 +29,15 @@ curl -H "Authorization: Token token=some_token" 'http://localhost:3000/api/v1/ac
 To get billing details for a specific account for the current month, this data will be up to date to the previous day.
 
 curl -H "Authorization: Token token=some_token" 'http://localhost:3000/api/v1/current_month/some_account'
+
+### Convert JSON data to CSV
+Ingest AWS billing detail json and spit out a pivot table analyzing costs by product and cost center
+
+```
+#!/usr/bin/env python
+import pandas as pd
+df = pd.read_json(<input file URL>)
+df.to_csv(<output file name>)
+```
+
+The file URL needs to be fully qualified for a local file, i.e. file://localhost/usr/local/data/foo.json). 
